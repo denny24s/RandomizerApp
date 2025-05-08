@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "RandomizerApp"
 include(":app")
+include(":data")
+include(":domain")
