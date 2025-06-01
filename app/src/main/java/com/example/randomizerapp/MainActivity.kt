@@ -3,14 +3,15 @@ package com.example.randomizerapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Box
+import com.example.randomizerapp.ui.SplashScreen
 import com.example.randomizerapp.ui.theme.RandomizerAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +19,42 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
+            RandomizerAppTheme {
+                AppEntryPoint()
+            }
         }
+    }
+}
+
+@Composable
+private fun AppEntryPoint() {
+    var isSplashVisible by remember { mutableStateOf(true) }
+
+    if (isSplashVisible) {
+        SplashScreen(onTimeout = { isSplashVisible = false })
+    } else {
+        MainPlaceholderScreen()
+    }
+}
+
+@Composable
+private fun MainPlaceholderScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Text(
+            text = "Main Screen",
+            modifier = Modifier
+                .align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
+fun MainPlaceholderPreview() {
+    RandomizerAppTheme {
+        MainPlaceholderScreen()
     }
 }
