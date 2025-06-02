@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Box
 import com.example.randomizerapp.ui.SplashScreen
+import com.example.randomizerapp.ui.main.MainScreen
 import com.example.randomizerapp.ui.theme.RandomizerAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,9 +34,10 @@ private fun AppEntryPoint() {
     if (isSplashVisible) {
         SplashScreen(onTimeout = { isSplashVisible = false })
     } else {
-        MainPlaceholderScreen()
+        MainScreen(goToSettings = { /* navController.navigate("settings") */ })
     }
 }
+
 
 @Composable
 private fun MainPlaceholderScreen() {

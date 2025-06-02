@@ -11,3 +11,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val SplashBackground = Color(0xFF3E4054)
+
+val AccentRed = Color(0xFFE04444)      // tabs underline, Get random
+val DiceHistoryBg = Color(0xFF47495C)
