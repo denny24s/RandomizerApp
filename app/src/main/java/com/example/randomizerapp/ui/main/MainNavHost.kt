@@ -9,6 +9,9 @@ import androidx.navigation.*
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import androidx.navigation.compose.rememberNavController
+import com.example.randomizerapp.ui.main.dice.DiceScreen
+import com.example.randomizerapp.ui.main.dice.NumberScreen
+import com.example.randomizerapp.ui.main.dice.YesNoScreen
 import com.example.randomizerapp.ui.theme.SplashBackground
 
 enum class MainTab(val route: String) { Dice("dice"), YesNo("yesno"), Number("number") }

@@ -1,10 +1,9 @@
-// DiceViewModel.kt  (presentation layer, app module)
 package com.example.randomizerapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.randomizerapp.domain.usecase.dice.GetDiceHistoryUseCase
-import com.example.randomizerapp.domain.usecase.dice.RollDiceUseCase
+import com.example.domain.usecase.dice.GetDiceHistoryUseCase
+import com.example.domain.usecase.dice.RollDiceUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -35,6 +34,8 @@ class DiceViewModel(
         val result = roll(_state.value.diceCount)
         _state.update { it.copy(faces = result.faces) }
     }
+
+
 
     fun incDice() = _state.update { it.copy(diceCount = (it.diceCount + 1).coerceAtMost(3)) }
     fun decDice() = _state.update { it.copy(diceCount = (it.diceCount - 1).coerceAtLeast(1)) }

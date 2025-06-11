@@ -23,6 +23,7 @@ import com.example.randomizerapp.viewmodel.DiceViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
+
 fun DiceScreen(vm: DiceViewModel = koinViewModel()) {
     val state by vm.state.collectAsState()
 
@@ -124,6 +125,8 @@ private fun DiceFacesRow(faces: List<Int>) {
         }
     }
 }
+
+
 
 private fun diceRes(face: Int) = when (face) {
     1 -> R.drawable.dice_1

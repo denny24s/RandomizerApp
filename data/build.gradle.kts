@@ -35,6 +35,7 @@ android {
 dependencies {
 
     implementation(project(":domain"))
+    implementation(project(":app"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
