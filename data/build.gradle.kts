@@ -35,7 +35,9 @@ android {
 dependencies {
 
     implementation(project(":domain"))
-    implementation(project(":app"))
+
+
+    implementation("io.insert-koin:koin-core:3.5.3")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

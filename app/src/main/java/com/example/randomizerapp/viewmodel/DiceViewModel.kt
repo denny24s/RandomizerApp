@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.dice.GetDiceHistoryUseCase
 import com.example.domain.usecase.dice.RollDiceUseCase
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class DiceUiState(
@@ -21,14 +22,7 @@ class DiceViewModel(
     private val _state = MutableStateFlow(DiceUiState())
     val state: StateFlow<DiceUiState> = _state.asStateFlow()
 
-    init {
-        // subscribe history
-        viewModelScope.launch {
-            historyUC().collect { list ->
-                _state.update { it.copy(history = list.map { res -> res.faces }) }
-            }
-        }
-    }
+
 
     fun onRoll() = viewModelScope.launch {
         val result = roll(_state.value.diceCount)

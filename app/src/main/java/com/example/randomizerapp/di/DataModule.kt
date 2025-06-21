@@ -1,4 +1,4 @@
-package com.example.data.di
+package com.example.randomizerapp.di
 
 import com.example.domain.repository.RandomRepository
 import com.example.domain.repository.RandomRepositoryImpl

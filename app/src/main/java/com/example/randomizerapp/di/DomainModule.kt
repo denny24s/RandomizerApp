@@ -1,4 +1,4 @@
-package com.example.data.di
+package com.example.randomizerapp.di
 
 import com.example.domain.usecase.dice.GetDiceHistoryUseCase
 import com.example.domain.usecase.dice.RollDiceUseCase
