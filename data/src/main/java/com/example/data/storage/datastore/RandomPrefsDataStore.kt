@@ -7,7 +7,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 
 import com.example.data.storage.datastore.DataStoreKeys.DICE_HISTORY
+import com.example.data.storage.datastore.DataStoreKeys.YESNO_HISTORY
 import com.example.domain.models.DiceResult
+import com.example.domain.models.YesNoResult
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -41,5 +43,21 @@ class RandomPrefsDataStore(private val context: Context) {
 
     suspend fun clearHistory() {
         context.dataStore.edit { it.remove(keyDiceHistory) }
+    }
+
+    private val keyYesNoHistory = stringPreferencesKey(YESNO_HISTORY)
+
+    val yesNoHistory: Flow<List<YesNoResult>> = context.dataStore.data.map { prefs ->
+        prefs[keyYesNoHistory]
+            ?.let { gson.fromJson(it, Array<YesNoResult>::class.java)?.toList() }
+            ?: emptyList()
+    }
+
+    suspend fun saveYesNo(res: YesNoResult) = context.dataStore.edit { prefs ->
+        val cur = prefs[keyYesNoHistory]
+            ?.let { gson.fromJson(it, Array<YesNoResult>::class.java)?.toMutableList() }
+            ?: mutableListOf()
+        cur.add(0, res)
+        prefs[keyYesNoHistory] = gson.toJson(cur.take(10))
     }
 }

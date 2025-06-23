@@ -1,5 +1,5 @@
 // DiceScreen.kt  (ui/main/dice)
-package com.example.randomizerapp.ui.main.dice
+package com.example.randomizerapp.ui.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
@@ -163,7 +163,6 @@ private fun diceRes(face: Int) = when (face) {
 }
 
 
-@Composable fun YesNoScreen()    { Placeholder("Yes / No") }
 @Composable fun NumberScreen()   { Placeholder("Number") }
 
 @Composable
@@ -172,7 +171,7 @@ private fun Placeholder(label: String) = Box(Modifier.fillMaxSize()) {
 }
 
 @Composable
-private fun SquareIconButton(
+fun SquareIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
     @DrawableRes iconRes: Int,

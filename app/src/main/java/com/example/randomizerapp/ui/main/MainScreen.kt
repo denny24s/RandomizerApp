@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.randomizerapp.R
 import com.example.randomizerapp.ui.theme.AccentRed
 import com.example.randomizerapp.ui.theme.SplashBackground
@@ -70,6 +71,9 @@ fun MainScreen(goToSettings: () -> Unit = {}) {
 
         Column(Modifier.padding(inner)) {
 
+            val navController = rememberNavController()
+            var currentTab by remember { mutableStateOf(MainTab.Dice) }
+
             /* ─── TabRow одразу під TopBar ─── */
             TabRow(
                 selectedTabIndex = currentTab.ordinal,
@@ -84,16 +88,26 @@ fun MainScreen(goToSettings: () -> Unit = {}) {
                 }
             ) {
                 MainTab.entries.forEach { tab ->
+
+                    val route = when (tab) {
+                        MainTab.Dice   -> "dice"
+                        MainTab.YesNo  -> "yesno"
+                        MainTab.Number -> "number"
+                    }
+
                     LeadingIconTab(
                         selected = tab == currentTab,
-                        onClick = { currentTab = tab },
+                        onClick = {
+                            currentTab = tab
+                            navController.navigate(route) {
+                                /* не кладемо дублів в backstack */
+                                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                         text = {
-                            Text(
-                                tab.name,
-                                style = MaterialTheme.typography.labelMedium,
-                                fontSize = 12.sp,
-                                maxLines = 1
-                            )
+                            Text(tab.name)
                         },
                         icon = {
                             val iconRes = when (tab) {
@@ -115,8 +129,9 @@ fun MainScreen(goToSettings: () -> Unit = {}) {
                 }
             }
 
-            /* ─── Сам контент вкладки ─── */
+            /* --- Контент вкладки --- */
             MainNavHost(
+                navController = navController,           // <-- передаємо
                 modifier = Modifier.fillMaxSize()
             )
         }

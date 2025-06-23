@@ -2,6 +2,7 @@ package com.example.data.repository
 
 import com.example.data.storage.datastore.RandomPrefsDataStore
 import com.example.domain.models.DiceResult
+import com.example.domain.models.YesNoResult
 import com.example.domain.repository.RandomRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,26 @@ import kotlin.random.Random
 class RandomRepositoryImpl(
     private val prefs: RandomPrefsDataStore
 ) : RandomRepository {
+
+
+
+    private val yesNoCache = MutableStateFlow<List<YesNoResult>>(emptyList())
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            prefs.yesNoHistory.collect { yesNoCache.value = it }
+        }
+    }
+
+    override suspend fun getYesNo(): YesNoResult {
+        val res = YesNoResult(Random.nextBoolean())
+        prefs.saveYesNo(res)
+        return res
+    }
+
+    override fun yesNoHistory(): Flow<List<YesNoResult>> = yesNoCache.asStateFlow()
+
+
 
     private val _historyCache = MutableStateFlow<List<DiceResult>>(emptyList())
 
