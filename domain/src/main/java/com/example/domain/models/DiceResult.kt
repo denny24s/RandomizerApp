@@ -1,6 +1,4 @@
 package com.example.domain.models
 
-/**
- * Повертаємо лише список граней, тому робимо простий data-class.
- */
+/** Зберігаємо лише список граней (1…6). */
 data class DiceResult(val faces: List<Int>)

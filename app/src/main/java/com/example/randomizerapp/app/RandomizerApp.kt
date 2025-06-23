@@ -1,4 +1,4 @@
-package com.example.randomizerapp.ui.main
+package com.example.randomizerapp.app
 
 import android.app.Application
 import com.example.randomizerapp.di.dataModule

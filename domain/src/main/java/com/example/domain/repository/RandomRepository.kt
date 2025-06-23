@@ -5,8 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface RandomRepository {
-    suspend fun rollDice(count: Int): DiceResult
-
-    /** Історія з останніми 10 результатами (нові спочатку). */
-    fun diceHistory(): Flow<List<DiceResult>>
+    suspend fun rollDice(count: Int): DiceResult            // уже є
+    fun diceHistory(): Flow<List<DiceResult>>               // ✅
 }
+

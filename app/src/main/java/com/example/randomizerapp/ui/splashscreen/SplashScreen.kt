@@ -1,4 +1,4 @@
-package com.example.randomizerapp.ui
+package com.example.randomizerapp.ui.splashscreen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

@@ -15,18 +15,24 @@ data class DiceUiState(
 )
 
 class DiceViewModel(
-    private val roll: RollDiceUseCase,
-    private val historyUC: GetDiceHistoryUseCase
+    private val rollUC: RollDiceUseCase,
+    getHistoryUC: GetDiceHistoryUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DiceUiState())
     val state: StateFlow<DiceUiState> = _state.asStateFlow()
 
-
+    init {
+        viewModelScope.launch {
+            getHistoryUC().collect { list ->
+                _state.update { it.copy(history = list.map { dr -> dr.faces }) }
+            }
+        }
+    }
 
     fun onRoll() = viewModelScope.launch {
-        val result = roll(_state.value.diceCount)
-        _state.update { it.copy(faces = result.faces) }
+        val res = rollUC(_state.value.diceCount)          // ⬅️ RollDiceUseCase сам зберігає
+        _state.update { it.copy(faces = res.faces) }
     }
 
 
