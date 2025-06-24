@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 
 import com.example.data.storage.datastore.DataStoreKeys.DICE_HISTORY
+import com.example.data.storage.datastore.DataStoreKeys.NUMBER_HISTORY
 import com.example.data.storage.datastore.DataStoreKeys.YESNO_HISTORY
 import com.example.domain.models.DiceResult
 import com.example.domain.models.YesNoResult
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.map
 private val Context.dataStore by preferencesDataStore(name = "random_prefs")
 private val gson = Gson()
 private val keyDiceHistory = stringPreferencesKey(DICE_HISTORY)
+private val keyNumberHistory = stringPreferencesKey(NUMBER_HISTORY)
 
 /** API, щоб репозиторій міг читати/писати prefs */
 class RandomPrefsDataStore(private val context: Context) {
@@ -42,8 +44,11 @@ class RandomPrefsDataStore(private val context: Context) {
     }
 
     suspend fun clearHistory() {
-        context.dataStore.edit { it.remove(keyDiceHistory) }
+        context.dataStore.edit { prefs ->
+            prefs.remove(keyDiceHistory)
+        }
     }
+
 
     private val keyYesNoHistory = stringPreferencesKey(YESNO_HISTORY)
 
@@ -60,4 +65,30 @@ class RandomPrefsDataStore(private val context: Context) {
         cur.add(0, res)
         prefs[keyYesNoHistory] = gson.toJson(cur.take(10))
     }
+
+
+
+    suspend fun appendNumber(n: Int) {
+        context.dataStore.edit { prefs ->
+            val current = prefs[keyNumberHistory]
+                ?.let { gson.fromJson(it, Array<StoredNumber>::class.java)?.toMutableList() }
+                ?: mutableListOf()
+            current.add(StoredNumber(n))
+            prefs[keyNumberHistory] = gson.toJson(current.takeLast(10))
+        }
+    }
+
+
+    val numberHistoryFlow: Flow<List<StoredNumber>> = context.dataStore.data.map { prefs ->
+        prefs[keyNumberHistory]
+            ?.let {
+                gson.fromJson(it, Array<StoredNumber>::class.java)?.toList()
+            } ?: emptyList()
+    }
+
+
+
+
 }
+
+data class StoredNumber(val value: Int)

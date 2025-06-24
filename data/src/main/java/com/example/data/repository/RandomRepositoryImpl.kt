@@ -2,6 +2,7 @@ package com.example.data.repository
 
 import com.example.data.storage.datastore.RandomPrefsDataStore
 import com.example.domain.models.DiceResult
+import com.example.domain.models.NumberResult
 import com.example.domain.models.YesNoResult
 import com.example.domain.repository.RandomRepository
 import kotlinx.coroutines.CoroutineScope
@@ -9,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -55,5 +57,14 @@ class RandomRepositoryImpl(
     }
 
     suspend fun clearDiceHistory() = prefs.clearHistory()
+
+    override suspend fun getRandomInt(from: Int, to: Int): NumberResult {
+        val result = (from..to).random()
+        prefs.appendNumber(result)
+        return NumberResult(result)
+    }
+
+    override fun observeNumberHistory(limit: Int) =
+        prefs.numberHistoryFlow.map { list -> list.takeLast(limit).map { NumberResult(it.value) } }
 }
 

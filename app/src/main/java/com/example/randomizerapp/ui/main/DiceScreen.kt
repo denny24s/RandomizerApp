@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.randomizerapp.R
 import com.example.randomizerapp.ui.theme.AccentRed
 import com.example.randomizerapp.ui.theme.ControlButtonBg
+import com.example.randomizerapp.ui.theme.HistoryBg
 import com.example.randomizerapp.viewmodel.DiceViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -163,7 +164,6 @@ private fun diceRes(face: Int) = when (face) {
 }
 
 
-@Composable fun NumberScreen()   { Placeholder("Number") }
 
 @Composable
 private fun Placeholder(label: String) = Box(Modifier.fillMaxSize()) {
@@ -201,7 +201,7 @@ fun SquareIconButton(
 private fun HistoryCard(history: List<List<Int>>) {
     Surface(
         shape = RoundedCornerShape(8.dp),
-        color = Color(0xFF4A4C5F)          // той самий фон
+        color = HistoryBg       // той самий фон
     ) {
         LazyColumn(
             modifier = Modifier

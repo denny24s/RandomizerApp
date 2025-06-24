@@ -16,3 +16,4 @@ val AccentRed = Color(0xFFE04444)      // tabs underline, Get random
 val DiceHistoryBg = Color(0xFF47495C)
 
 val ControlButtonBg = Color(0xFF5A5C73)
+val HistoryBg = Color(0xFF4A4C5F)

@@ -37,6 +37,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.text.font.FontWeight
+import com.example.randomizerapp.ui.theme.HistoryBg
 
 
 @Composable
@@ -96,6 +98,7 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
                 containerColor = AccentRed,
                 contentColor = Color.White
             ),
+            shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp, start = 66.dp, end = 66.dp)
@@ -109,7 +112,7 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
 private fun YesNoHistoryCard(list: List<YesNoResult>) {
     Surface(
         shape = RoundedCornerShape(8.dp),
-        color = Color(0xFF4A4C5F)
+        color = HistoryBg
     ) {
         LazyColumn(
             modifier = Modifier
@@ -126,6 +129,7 @@ private fun YesNoHistoryCard(list: List<YesNoResult>) {
                     Text(
                         text = if (item.answer) "Yes" else "No",
                         color = Color.White,
+                        fontWeight = FontWeight.Bold,
                         fontSize = MaterialTheme.typography.titleMedium.fontSize
                     )
 

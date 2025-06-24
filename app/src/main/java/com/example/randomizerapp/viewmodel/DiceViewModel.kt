@@ -8,11 +8,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class DiceUiState(
-    val faces: List<Int> = emptyList(),
-    val history: List<List<Int>> = emptyList(),
-    val diceCount: Int = 1
-)
+
 
 class DiceViewModel(
     private val rollUC: RollDiceUseCase,
