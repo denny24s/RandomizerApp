@@ -34,7 +34,7 @@ private fun AppEntryPoint() {
     if (isSplashVisible) {
         SplashScreen(onTimeout = { isSplashVisible = false })
     } else {
-        MainScreen(goToSettings = { /* navController.navigate("settings") */ })
+        MainScreen()          //  ← без goToSettings
     }
 }
 

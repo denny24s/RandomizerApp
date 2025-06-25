@@ -56,7 +56,6 @@ class RandomRepositoryImpl(
         return res
     }
 
-    suspend fun clearDiceHistory() = prefs.clearHistory()
 
     override suspend fun getRandomInt(from: Int, to: Int): NumberResult {
         val result = (from..to).random()
@@ -66,5 +65,7 @@ class RandomRepositoryImpl(
 
     override fun observeNumberHistory(limit: Int) =
         prefs.numberHistoryFlow.map { list -> list.takeLast(limit).map { NumberResult(it.value) } }
+
+
 }
 

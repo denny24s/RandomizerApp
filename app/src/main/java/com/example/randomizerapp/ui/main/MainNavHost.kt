@@ -6,10 +6,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
-import androidx.navigation.compose.rememberNavController
+import com.example.randomizerapp.ui.setting.SettingsScreen
 import com.example.randomizerapp.ui.theme.SplashBackground
 
-enum class MainTab(val route: String) { Dice("dice"), YesNo("yesno"), Number("number") }
+enum class MainTab(val route: String) {
+    Dice("dice"), YesNo("yesno"), Number("number")
+}
+
+const val SETTINGS_ROUTE = "settings"
 
 @Composable
 fun MainNavHost(
@@ -26,5 +30,9 @@ fun MainNavHost(
         composable(MainTab.Dice.route)   { DiceScreen() }
         composable(MainTab.YesNo.route)  { YesNoScreen() }
         composable(MainTab.Number.route) { NumberScreen() }
+        composable(SETTINGS_ROUTE)       {
+            SettingsScreen(onBack = { navController.popBackStack() })
+        }
     }
 }
+

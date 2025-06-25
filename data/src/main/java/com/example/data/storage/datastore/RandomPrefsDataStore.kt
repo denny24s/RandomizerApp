@@ -1,94 +1,68 @@
 package com.example.data.storage.datastore
 
-
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-
-import com.example.data.storage.datastore.DataStoreKeys.DICE_HISTORY
-import com.example.data.storage.datastore.DataStoreKeys.NUMBER_HISTORY
-import com.example.data.storage.datastore.DataStoreKeys.YESNO_HISTORY
-import com.example.domain.models.DiceResult
-import com.example.domain.models.YesNoResult
+import com.example.domain.models.*
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore by preferencesDataStore(name = "random_prefs")
-private val gson = Gson()
-private val keyDiceHistory = stringPreferencesKey(DICE_HISTORY)
-private val keyNumberHistory = stringPreferencesKey(NUMBER_HISTORY)
-
-/** API, щоб репозиторій міг читати/писати prefs */
 class RandomPrefsDataStore(private val context: Context) {
 
-    /** повертає Flow<List<DiceResult>> */
-    val diceHistory: Flow<List<DiceResult>> = context.dataStore.data.map { prefs ->
+    private val ds = context.randomDataStore
+    private val gson = Gson()
+
+    /* ---------- keys ---------- */
+    private val keyDiceHistory   = stringPreferencesKey(DataStoreKeys.DICE_HISTORY)
+    private val keyYesNoHistory  = stringPreferencesKey(DataStoreKeys.YESNO_HISTORY)
+    private val keyNumberHistory = stringPreferencesKey(DataStoreKeys.NUMBER_HISTORY)
+
+    /* ---------- READ ---------- */
+    val diceHistory:  Flow<List<DiceResult>>   = ds.data.map { prefs ->
         prefs[keyDiceHistory]
-            ?.let { json ->
-                gson.fromJson(json, Array<DiceResult>::class.java)?.toList()
-            } ?: emptyList()
+            ?.let { gson.fromJson(it, Array<DiceResult>::class.java)?.toList() }
+            ?: emptyList()
     }
 
-    /** оновлюємо історію (додаємо новий roll → обрізаємо до 10) */
-    suspend fun saveRoll(result: DiceResult) {
-        context.dataStore.edit { prefs ->
-            val current = prefs[keyDiceHistory]
-                ?.let { gson.fromJson(it, Array<DiceResult>::class.java)?.toMutableList() }
-                ?: mutableListOf()
-            current.add(0, result)            // новий угорі
-            val trimmed = current.take(10)
-            prefs[keyDiceHistory] = gson.toJson(trimmed)
-        }
-    }
-
-    suspend fun clearHistory() {
-        context.dataStore.edit { prefs ->
-            prefs.remove(keyDiceHistory)
-        }
-    }
-
-
-    private val keyYesNoHistory = stringPreferencesKey(YESNO_HISTORY)
-
-    val yesNoHistory: Flow<List<YesNoResult>> = context.dataStore.data.map { prefs ->
+    val yesNoHistory: Flow<List<YesNoResult>>  = ds.data.map { prefs ->
         prefs[keyYesNoHistory]
             ?.let { gson.fromJson(it, Array<YesNoResult>::class.java)?.toList() }
             ?: emptyList()
     }
 
-    suspend fun saveYesNo(res: YesNoResult) = context.dataStore.edit { prefs ->
-        val cur = prefs[keyYesNoHistory]
-            ?.let { gson.fromJson(it, Array<YesNoResult>::class.java)?.toMutableList() }
-            ?: mutableListOf()
-        cur.add(0, res)
-        prefs[keyYesNoHistory] = gson.toJson(cur.take(10))
-    }
-
-
-
-    suspend fun appendNumber(n: Int) {
-        context.dataStore.edit { prefs ->
-            val current = prefs[keyNumberHistory]
-                ?.let { gson.fromJson(it, Array<StoredNumber>::class.java)?.toMutableList() }
-                ?: mutableListOf()
-            current.add(StoredNumber(n))
-            prefs[keyNumberHistory] = gson.toJson(current.takeLast(10))
-        }
-    }
-
-
-    val numberHistoryFlow: Flow<List<StoredNumber>> = context.dataStore.data.map { prefs ->
+    val numberHistoryFlow: Flow<List<StoredNumber>> = ds.data.map { prefs ->
         prefs[keyNumberHistory]
-            ?.let {
-                gson.fromJson(it, Array<StoredNumber>::class.java)?.toList()
-            } ?: emptyList()
+            ?.let { gson.fromJson(it, Array<StoredNumber>::class.java)?.toList() }
+            ?: emptyList()
     }
 
+    /* ---------- WRITE ---------- */
+    suspend fun saveRoll(res: DiceResult) = ds.edit { p ->
+        val cur = p[keyDiceHistory]?.let {
+            gson.fromJson(it, Array<DiceResult>::class.java)?.toMutableList()
+        } ?: mutableListOf()
+        cur.add(0, res)
+        p[keyDiceHistory] = gson.toJson(cur.take(10))
+    }
 
+    suspend fun saveYesNo(res: YesNoResult) = ds.edit { p ->
+        val cur = p[keyYesNoHistory]?.let {
+            gson.fromJson(it, Array<YesNoResult>::class.java)?.toMutableList()
+        } ?: mutableListOf()
+        cur.add(0, res)
+        p[keyYesNoHistory] = gson.toJson(cur.take(10))
+    }
 
+    suspend fun appendNumber(n: Int) = ds.edit { p ->
+        val cur = p[keyNumberHistory]?.let {
+            gson.fromJson(it, Array<StoredNumber>::class.java)?.toMutableList()
+        } ?: mutableListOf()
+        cur.add(StoredNumber(n))
+        p[keyNumberHistory] = gson.toJson(cur.takeLast(10))
+    }
 
+    suspend fun clearHistories() = ds.edit { it.clear() }
 }
 
 data class StoredNumber(val value: Int)

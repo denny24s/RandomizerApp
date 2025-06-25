@@ -1,13 +1,19 @@
+// di/DataModule.kt
 package com.example.randomizerapp.di
 
-import com.example.domain.repository.RandomRepository
-import com.example.data.repository.RandomRepositoryImpl
-import com.example.data.storage.datastore.RandomPrefsDataStore
+import com.example.data.repository.*
+import com.example.data.storage.datastore.*
+import com.example.domain.repository.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val dataModule = module {
+    /* helper для історій */
     single { RandomPrefsDataStore(androidContext()) }
-    single<RandomRepository> { RandomRepositoryImpl(get()) }
-}
 
+    /* сам DataStore потрібен SettingsRepository */
+    single { androidContext().randomDataStore }
+
+    single<RandomRepository>   { RandomRepositoryImpl(get()) }   // RandomPrefsDataStore
+    single<SettingsRepository> { SettingsRepositoryImpl(get()) } // DataStore<Preferences>
+}

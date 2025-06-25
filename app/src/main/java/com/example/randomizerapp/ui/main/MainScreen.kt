@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -22,9 +23,11 @@ import com.example.randomizerapp.ui.theme.SplashBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(goToSettings: () -> Unit = {}) {
+fun MainScreen() {
 
-    var currentTab by remember { mutableStateOf(MainTab.Dice) }
+    val navController = rememberNavController()
+    var currentTab by rememberSaveable { mutableStateOf(MainTab.Dice) }
+
 
     /** ➡️  переставляємо TabRow ДО Scaffold-body,
      *      тому в Scaffold залишаємо тільки TopBar */
@@ -57,58 +60,42 @@ fun MainScreen(goToSettings: () -> Unit = {}) {
                     )
                 },
                 actions = {
-                    IconButton(onClick = goToSettings) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Menu",
-                            tint = Color.White
-                        )
+                    IconButton(
+                        onClick = { navController.navigate(SETTINGS_ROUTE) }
+                    ) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color.White)
                     }
                 }
             )
         }
-    ) { inner ->                       // ← padding від TopBar
+    ) { innerPadding ->
 
-        Column(Modifier.padding(inner)) {
+        Column(Modifier.padding(innerPadding)) {
 
-            val navController = rememberNavController()
-            var currentTab by remember { mutableStateOf(MainTab.Dice) }
-
-            /* ─── TabRow одразу під TopBar ─── */
+            /* ---------- TabRow ---------- */
             TabRow(
                 selectedTabIndex = currentTab.ordinal,
                 containerColor = SplashBackground,
                 contentColor = AccentRed,
-                indicator = { tabPositions ->
+                indicator = { tabs ->
                     TabRowDefaults.Indicator(
-                        Modifier.tabIndicatorOffset(tabPositions[currentTab.ordinal]),
-                        color = AccentRed,
-                        height = 2.dp
+                        Modifier.tabIndicatorOffset(tabs[currentTab.ordinal]),
+                        color = AccentRed, height = 2.dp
                     )
                 }
             ) {
                 MainTab.entries.forEach { tab ->
-
-                    val route = when (tab) {
-                        MainTab.Dice   -> "dice"
-                        MainTab.YesNo  -> "yesno"
-                        MainTab.Number -> "number"
-                    }
-
                     LeadingIconTab(
                         selected = tab == currentTab,
                         onClick = {
                             currentTab = tab
-                            navController.navigate(route) {
-                                /* не кладемо дублів в backstack */
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            navController.navigate(tab.route) {
+                                popUpTo(MainTab.Dice.route) { saveState = true }
                                 launchSingleTop = true
                                 restoreState = true
                             }
                         },
-                        text = {
-                            Text(tab.name)
-                        },
+                        text = { Text(tab.name) },
                         icon = {
                             val iconRes = when (tab) {
                                 MainTab.Dice   -> R.drawable.dice_5414035
@@ -121,7 +108,6 @@ fun MainScreen(goToSettings: () -> Unit = {}) {
                                 tint = if (tab == currentTab) AccentRed else Color.White,
                                 modifier = Modifier.size(20.dp)
                             )
-
                         },
                         selectedContentColor = AccentRed,
                         unselectedContentColor = Color.White
@@ -129,9 +115,9 @@ fun MainScreen(goToSettings: () -> Unit = {}) {
                 }
             }
 
-            /* --- Контент вкладки --- */
+            /* ---------- Навігаційний хост ---------- */
             MainNavHost(
-                navController = navController,           // <-- передаємо
+                navController = navController,
                 modifier = Modifier.fillMaxSize()
             )
         }
