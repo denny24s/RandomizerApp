@@ -115,7 +115,7 @@ fun MainScreen() {
                 }
             }
 
-            /* ---------- Навігаційний хост ---------- */
+
             MainNavHost(
                 navController = navController,
                 modifier = Modifier.fillMaxSize()
