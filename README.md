@@ -29,9 +29,3 @@ Material 3 UI.
   - *Number* — generate an integer between user-defined **from / to** bounds.
 
 
-
-## Quick Start
-
-1. Clone the repo:  
-   [ git clone https://github.com/your‑user/ccurrency‑converter.git](https://github.com/denny24s/CurrencyConverter.git)
-
