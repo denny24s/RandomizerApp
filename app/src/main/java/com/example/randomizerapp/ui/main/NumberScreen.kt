@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.example.randomizerapp.R
 import com.example.randomizerapp.ui.theme.AccentRed
 import com.example.randomizerapp.ui.theme.ControlButtonBg
+import com.example.randomizerapp.ui.theme.MainColor
 import com.example.randomizerapp.viewmodel.NumberViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -49,7 +51,11 @@ fun NumberScreen(vm: NumberViewModel = koinViewModel()) {
     val state by vm.state.collectAsState()
     var showHistory by remember { mutableStateOf(true) }
 
-    Box(Modifier.fillMaxSize()) {
+    Box(
+        Modifier
+            .background(MainColor)
+            .fillMaxSize()
+    ) {
 
         state.number?.let { num ->
             val alpha by animateFloatAsState(1f, label = "")
@@ -130,7 +136,7 @@ fun NumberScreen(vm: NumberViewModel = koinViewModel()) {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp, start = 66.dp, end = 66.dp)
                 .fillMaxWidth()
-        ) { Text("Get random") }
+        ) { Text("Get random", style = MaterialTheme.typography.labelLarge) }
     }
 }
 

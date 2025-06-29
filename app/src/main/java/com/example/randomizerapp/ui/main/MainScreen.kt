@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LeadingIconTab
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.TabRow
@@ -32,7 +33,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.randomizerapp.R
 import com.example.randomizerapp.ui.theme.AccentRed
-import com.example.randomizerapp.ui.theme.SplashBackground
+import com.example.randomizerapp.ui.theme.MainColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +51,7 @@ fun MainScreen() {
             if (!isSettings) {
                 SmallTopAppBar(
                     colors = TopAppBarDefaults.smallTopAppBarColors(
-                        containerColor = SplashBackground,
+                        containerColor = MainColor,
                         titleContentColor = Color.White
                     ),
                     navigationIcon = {
@@ -86,7 +87,7 @@ fun MainScreen() {
             }
         },
 
-        containerColor = SplashBackground
+        containerColor = MainColor
     ) { innerPadding ->
 
         Column(Modifier.padding(innerPadding)) {
@@ -94,7 +95,7 @@ fun MainScreen() {
             if (!isSettings) {
                 TabRow(
                     selectedTabIndex = currentTab.ordinal,
-                    containerColor = SplashBackground,
+                    containerColor = MainColor,
                     contentColor = AccentRed,
                     indicator = { tp ->
                         SecondaryIndicator(
@@ -115,7 +116,7 @@ fun MainScreen() {
                                     restoreState = true
                                 }
                             },
-                            text = { Text(tab.name) },
+                            text = { Text(tab.name, style = MaterialTheme.typography.labelMedium) },
                             icon = {
                                 val iconRes = when (tab) {
                                     MainTab.Dice -> R.drawable.dice_icon_main_screen

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.randomizerapp.R
+import com.example.randomizerapp.ui.theme.MainColor
 import com.example.randomizerapp.ui.theme.SplashBackground
 import com.example.randomizerapp.viewmodel.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -38,7 +39,7 @@ fun SettingsScreen(
 ) {
     val ctx = LocalContext.current
 
-    Surface(color = SplashBackground, modifier = Modifier.fillMaxSize()) {
+    Surface(color = MainColor, modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
 

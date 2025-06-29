@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +40,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import com.example.randomizerapp.ui.theme.HistoryBg
+import com.example.randomizerapp.ui.theme.MainColor
 
 
 @Composable
@@ -46,7 +48,11 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
     val state by vm.state.collectAsState()
     var showHistory by remember { mutableStateOf(true) }
 
-    Box(Modifier.fillMaxSize()) {
+    Box(
+        Modifier
+            .background(MainColor)
+            .fillMaxSize()
+    ) {
 
         state.answer?.let { ans ->
             val alpha by animateFloatAsState(1f, label = "")
@@ -70,7 +76,7 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
 
         AnimatedVisibility(
             visible = showHistory && state.history.isNotEmpty(),
-            enter   = fadeIn(tween(300)),
+            enter = fadeIn(tween(300)),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 80.dp, start = 66.dp, end = 66.dp)
@@ -100,7 +106,7 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp, start = 66.dp, end = 66.dp)
                 .fillMaxWidth()
-        ) { Text("Get random") }
+        ) { Text("Get random", style = MaterialTheme.typography.labelLarge) }
     }
 }
 

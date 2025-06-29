@@ -13,7 +13,8 @@ val Pink40 = Color(0xFF7D5260)
 val SplashBackground = Color(0xFF3E4054)
 
 val AccentRed = Color(0xFFE04444)
-val DiceHistoryBg = Color(0xFF47495C)
 
 val ControlButtonBg = Color(0xFF5A5C73)
 val HistoryBg = Color(0xFF4A4C5F)
+
+val MainColor = Color(0xFF373944)
