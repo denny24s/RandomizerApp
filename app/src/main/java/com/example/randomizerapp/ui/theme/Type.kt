@@ -8,11 +8,38 @@ import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
 val Typography = Typography(
+
+    /* заголовки */
+    headlineLarge = TextStyle(
+        fontFamily = Lexend,
+        fontWeight = FontWeight.Bold,
+        fontSize   = 32.sp,
+        lineHeight = 36.sp
+    ),
+    titleLarge = TextStyle(
+        fontFamily = Lexend,
+        fontWeight = FontWeight.SemiBold,
+        fontSize   = 22.sp
+    ),
+
+    /* тіло */
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = Lexend,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
+        fontSize   = 16.sp,
+        lineHeight = 24.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = Lexend,
+        fontWeight = FontWeight.Normal,
+        fontSize   = 14.sp
+    ),
+
+    /* підписи */
+    labelSmall = TextStyle(
+        fontFamily = Lexend,
+        fontWeight = FontWeight.Medium,
+        fontSize   = 11.sp,
         letterSpacing = 0.5.sp
     )
     /* Other default text styles to override

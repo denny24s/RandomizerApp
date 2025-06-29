@@ -54,7 +54,7 @@ fun SettingsScreen(
                 Text(
                     "Menu",
                     color = Color.White,
-                    fontSize = 24.sp,
+                    fontSize = 16.sp,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.align(Alignment.Center)
                 )

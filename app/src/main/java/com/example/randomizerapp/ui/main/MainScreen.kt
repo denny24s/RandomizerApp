@@ -109,7 +109,7 @@ fun MainScreen() {
                             /* ---- FIX: повертаємо iconRes ---- */
                             icon = {
                                 val iconRes = when (tab) {
-                                    MainTab.Dice   -> R.drawable.dice_5414035
+                                    MainTab.Dice   -> R.drawable.dice_10990646
                                     MainTab.YesNo  -> R.drawable.rule_24px
                                     MainTab.Number -> R.drawable.numbers_24px
                                 }
