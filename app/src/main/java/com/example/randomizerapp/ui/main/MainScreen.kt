@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.randomizerapp.R
 import com.example.randomizerapp.ui.theme.AccentRed
@@ -28,103 +29,117 @@ fun MainScreen() {
     val navController = rememberNavController()
     var currentTab by rememberSaveable { mutableStateOf(MainTab.Dice) }
 
+    // ❱❱  у будь-якому місці ПЕРЕД Scaffold:
+    val backEntry   by navController.currentBackStackEntryAsState()
+    val isSettings  = backEntry?.destination?.route == SETTINGS_ROUTE      // 👈
 
-    /** ➡️  переставляємо TabRow ДО Scaffold-body,
-     *      тому в Scaffold залишаємо тільки TopBar */
     Scaffold(
-        containerColor = SplashBackground,
+
+        /* ---------- TOP BAR ---------- */
         topBar = {
-            SmallTopAppBar(
-                colors = TopAppBarDefaults.smallTopAppBarColors(
-                    containerColor = SplashBackground,
-                    titleContentColor = Color.White
-                ),
-                navigationIcon = {
-                    // 🔹 маленька кісточка 24.dp
-                    Icon(
-                        painter = painterResource(R.drawable.dice_5),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .padding(start = 16.dp)
-                    )
-                },
-                title = {
-                    // 🔹 логотип-PNG “Ramdomizer+”
-                    Icon(
-                        painter = painterResource(R.drawable.logo_ramdomizer),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier.height(28.dp)         // зменшуємо
-                    )
-                },
-                actions = {
-                    IconButton(
-                        onClick = { navController.navigate(SETTINGS_ROUTE) }
-                    ) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color.White)
+            if (!isSettings) {                      // 👈 показуємо лише не в settings
+                SmallTopAppBar(
+                    colors = TopAppBarDefaults.smallTopAppBarColors(
+                        containerColor = SplashBackground,
+                        titleContentColor = Color.White
+                    ),
+                    navigationIcon = {
+                        Icon(
+                            painter = painterResource(R.drawable.dice_5),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .padding(start = 16.dp)
+                        )
+                    },
+                    title = {
+                        Icon(
+                            painter = painterResource(R.drawable.logo_ramdomizer),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                            modifier = Modifier.height(28.dp)
+                        )
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = { navController.navigate(SETTINGS_ROUTE) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Menu",
+                                tint = Color.White
+                            )
+                        }
                     }
-                }
-            )
-        }
+                )
+            }
+        },
+
+        containerColor = SplashBackground
     ) { innerPadding ->
 
         Column(Modifier.padding(innerPadding)) {
 
             /* ---------- TabRow ---------- */
-            TabRow(
-                selectedTabIndex = currentTab.ordinal,
-                containerColor = SplashBackground,
-                contentColor = AccentRed,
-                indicator = { tabs ->
-                    TabRowDefaults.Indicator(
-                        Modifier.tabIndicatorOffset(tabs[currentTab.ordinal]),
-                        color = AccentRed, height = 2.dp
-                    )
-                }
-            ) {
-                MainTab.entries.forEach { tab ->
-                    LeadingIconTab(
-                        selected = tab == currentTab,
-                        onClick = {
-                            currentTab = tab
-                            navController.navigate(tab.route) {
-                                popUpTo(MainTab.Dice.route) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        text = { Text(tab.name) },
-                        icon = {
-                            val iconRes = when (tab) {
-                                MainTab.Dice   -> R.drawable.dice_5414035
-                                MainTab.YesNo  -> R.drawable.rule_24px
-                                MainTab.Number -> R.drawable.numbers_24px
-                            }
-                            Icon(
-                                painter = painterResource(iconRes),
-                                contentDescription = tab.name,
-                                tint = if (tab == currentTab) AccentRed else Color.White,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        },
-                        selectedContentColor = AccentRed,
-                        unselectedContentColor = Color.White
-                    )
+            if (!isSettings) {                      // ← він уже ховався; лишаємо
+                TabRow(
+                    selectedTabIndex = currentTab.ordinal,
+                    containerColor = SplashBackground,
+                    contentColor   = AccentRed,
+                    indicator = { tp ->
+                        TabRowDefaults.Indicator(
+                            Modifier.tabIndicatorOffset(tp[currentTab.ordinal]),
+                            color = AccentRed, height = 2.dp
+                        )
+                    }
+                ) {
+                    MainTab.entries.forEach { tab ->
+                        LeadingIconTab(
+                            selected = tab == currentTab,
+                            onClick  = {
+                                currentTab = tab
+                                navController.navigate(tab.route) {
+                                    popUpTo(MainTab.Dice.route) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState    = true
+                                }
+                            },
+                            text = { Text(tab.name) },
+                            /* ---- FIX: повертаємо iconRes ---- */
+                            icon = {
+                                val iconRes = when (tab) {
+                                    MainTab.Dice   -> R.drawable.dice_5414035
+                                    MainTab.YesNo  -> R.drawable.rule_24px
+                                    MainTab.Number -> R.drawable.numbers_24px
+                                }
+                                Icon(
+                                    painter = painterResource(iconRes),
+                                    contentDescription = tab.name,
+                                    tint   = if (tab == currentTab) AccentRed else Color.White,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            },
+                            selectedContentColor = AccentRed,
+                            unselectedContentColor = Color.White
+                        )
+                    }
                 }
             }
 
-
+            /* ---------- Host ---------- */
             MainNavHost(
                 navController = navController,
-                modifier = Modifier.fillMaxSize()
+                modifier      = Modifier.fillMaxSize()
             )
         }
     }
 }
 
 
+
 @Preview
 @Composable
 private fun MainScreenPreview() = MainScreen()
+
+

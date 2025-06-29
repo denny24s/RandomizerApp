@@ -19,113 +19,107 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.randomizerapp.R
 import com.example.randomizerapp.ui.theme.SplashBackground
 import com.example.randomizerapp.viewmodel.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
+/* -------- SettingsScreen.kt -------- */
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
     vm: SettingsViewModel = koinViewModel()
 ) {
     val ctx = LocalContext.current
-    val state = vm.state.collectAsState().value
 
     Surface(color = SplashBackground, modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            /* ── Header ───────────────────────── */
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
+            /* ---------- Header ---------- */
+            Box(
+                Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, start = 8.dp)
+                    .padding(top = 24.dp, start = 24.dp, end = 8.dp)
             ) {
                 Icon(
                     painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                    contentDescription = "Back",
+                    contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(12.dp)                 // ← менше
+                        .align(Alignment.CenterStart)
                         .clickable { onBack() }
                 )
-                Spacer(Modifier.width(16.dp))
-                Text("Menu", color = Color.White, style = MaterialTheme.typography.titleLarge)
+                Text(
+                    "Menu",
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
 
-            Spacer(Modifier.height(32.dp))
-
+            /* ---------- Logo block ---------- */
+            Spacer(Modifier.height(120.dp))            // трохи вище
             Image(
                 painterResource(R.drawable.dice_5),
                 contentDescription = null,
-                modifier = Modifier.size(160.dp)
+                modifier = Modifier.size(180.dp)       // менша кость
             )
+            Spacer(Modifier.height(6.dp))
             Image(
                 painterResource(R.drawable.logo_ramdomizer),
                 contentDescription = null,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.height(48.dp)     // менший PNG
             )
 
-            Spacer(Modifier.height(48.dp))
-            Divider(color = Color(0x33FFFFFF))
+            Spacer(Modifier.height(120.dp))
 
-            /* ── Menu items ───────────────────── */
-            MenuItem(
-                icon = R.drawable.baseline_language_24,
-                title = "Language"
-            ) {
-                Toast
-                    .makeText(ctx, "Not implemented yet…", Toast.LENGTH_SHORT)
-                    .show()
+            /* ---------- Menu items ---------- */
+            MenuItem(R.drawable.baseline_language_24, "Language") {
+                Toast.makeText(ctx, "Not implemented yet…", Toast.LENGTH_SHORT).show()
             }
-
-            MenuItem(
-                icon = R.drawable.baseline_share_24,
-                title = "Share"
-            ) {
-                val link = "https://github.com/denny24s?tab=overview&from=2025-06-01&to=2025-06-24"
-                val share = Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, link)
-                }
-                ctx.startActivity(Intent.createChooser(share, "Share app"))
+            MenuItem(R.drawable.baseline_share_24, "Share") {
+                val link = "https://github.com/denny24s/RandomizerApp"
+                ctx.startActivity(
+                    Intent.createChooser(
+                        Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"; putExtra(Intent.EXTRA_TEXT, link)
+                        }, "Share app"
+                    )
+                )
             }
-
-            MenuItem(
-                icon = R.drawable.baseline_star_border_24,
-                title = "Rate"
-            ) {
-                val link = Uri.parse("https://github.com/denny24s?tab=overview&from=2025-06-01&to=2025-06-24")
-                val rate = Intent(Intent.ACTION_VIEW, link)
-                ctx.startActivity(rate)
+            MenuItem(R.drawable.baseline_star_border_24, "Rate") {
+                ctx.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/denny24s/RandomizerApp")
+                    )
+                )
             }
         }
     }
 }
 
 @Composable
-private fun MenuItem(
-    icon: Int,
-    title: String,
-    onClick: () -> Unit
-) {
+private fun MenuItem(icon: Int, title: String, onClick: () -> Unit) {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 24.dp, vertical = 20.dp)
+            .padding(horizontal = 24.dp, vertical = 18.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painterResource(icon),
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier.size(24.dp)
-        )
+        Icon(painterResource(icon), null, tint = Color.White, modifier = Modifier.size(24.dp))
         Spacer(Modifier.width(24.dp))
         Text(title, color = Color.White, style = MaterialTheme.typography.bodyLarge)
     }
-    Divider(color = Color(0x33FFFFFF), thickness = 1.dp)
+    /* ►  Divider вилучено */
 }
+
+
+
+
+
 
