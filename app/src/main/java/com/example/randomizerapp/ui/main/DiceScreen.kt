@@ -1,4 +1,3 @@
-// DiceScreen.kt  (ui/main/dice)
 package com.example.randomizerapp.ui.main
 
 import androidx.annotation.DrawableRes
@@ -33,21 +32,19 @@ fun DiceScreen(vm: DiceViewModel = koinViewModel()) {
 
     Box(Modifier.fillMaxSize()) {
 
-        /* ---------- Центр: самі кості ---------- */
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier           // ⬅️ ДОДАЙТЕ
+            modifier = Modifier
                 .align(Alignment.Center)
                 .padding(
                     bottom = 164.dp
                 )
-                .fillMaxWidth()           // ← оце і є ключ
+                .fillMaxWidth()
         ) {
             DiceFacesRow(state.faces)
             Spacer(Modifier.height(16.dp))
         }
 
-        /* ---------- HISTORY: притискаємо до кнопки ---------- */
         AnimatedVisibility(
             visible = showHistory && state.history.isNotEmpty(),
             enter = fadeIn(tween(300)),
@@ -57,14 +54,14 @@ fun DiceScreen(vm: DiceViewModel = koinViewModel()) {
                     bottom = 80.dp,
                     start = 66.dp,
                     end = 66.dp
-                ) // 100 dp ≈ висота кнопки + проміжок
+                )
                 .fillMaxWidth()
         ) {
             HistoryCard(history = state.history)
 
         }
 
-        /* ---- history toggle (зліва внизу) ---- */
+
         SquareIconButton(
             onClick = { showHistory = !showHistory },
             iconRes = R.drawable.format_list_numbered_24px,
@@ -74,7 +71,6 @@ fun DiceScreen(vm: DiceViewModel = koinViewModel()) {
                 .padding(start = 6.dp, bottom = 24.dp)
         )
 
-        /* ---- plus / minus (справа внизу) ---- */
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -97,7 +93,6 @@ fun DiceScreen(vm: DiceViewModel = koinViewModel()) {
         }
 
 
-        // Get random button (bottom-center)
         Button(
             onClick = vm::onRoll,
             colors = ButtonDefaults.buttonColors(
@@ -115,30 +110,26 @@ fun DiceScreen(vm: DiceViewModel = koinViewModel()) {
     }
 }
 
-/* ---- reusable composables ---- */
 
 @Composable
 private fun DiceFacesRow(faces: List<Int>) {
-    // fade-in так, як було
     val alpha by animateFloatAsState(
         targetValue = if (faces.isEmpty()) 0f else 1f,
         label = ""
     )
 
-    /* ── 1. Обираємо розмір і відступи залежно від кількості ── */
     val (diceSize, spacing) = when (faces.size) {
-        3    -> 96.dp to 12.dp   // три кості – дрібніші й ближчі
-        else -> 120.dp to 24.dp  // 1 або 2 – як раніше
+        3 -> 96.dp to 12.dp
+        else -> 120.dp to 24.dp
     }
 
-    /* ── 2. Рядок заповнює ширину й центрує контент ── */
     Row(
         horizontalArrangement = Arrangement.spacedBy(
             spacing,
-            Alignment.CenterHorizontally          // ⚡️ центрування
+            Alignment.CenterHorizontally
         ),
         modifier = Modifier
-            .fillMaxWidth()                       // займаємо всю ширину
+            .fillMaxWidth()
             .alpha(alpha)
     ) {
         faces.forEach { face ->
@@ -150,8 +141,6 @@ private fun DiceFacesRow(faces: List<Int>) {
         }
     }
 }
-
-
 
 
 private fun diceRes(face: Int) = when (face) {
@@ -166,11 +155,6 @@ private fun diceRes(face: Int) = when (face) {
 
 
 @Composable
-private fun Placeholder(label: String) = Box(Modifier.fillMaxSize()) {
-    Text(label, modifier = Modifier.align(Alignment.Center), color = Color.White)
-}
-
-@Composable
 fun SquareIconButton(
     onClick: () -> Unit,
     enabled: Boolean = true,
@@ -179,14 +163,14 @@ fun SquareIconButton(
     contentDesc: String
 ) {
     Surface(
-        shape  = RoundedCornerShape(12.dp),
-        color  = ControlButtonBg,
-        modifier = modifier.size(56.dp)                // квадрат 56×56
+        shape = RoundedCornerShape(12.dp),
+        color = ControlButtonBg,
+        modifier = modifier.size(56.dp)
     ) {
         IconButton(
             onClick = onClick,
             enabled = enabled,
-            modifier = Modifier.fillMaxSize()           // заповнюємо Surface
+            modifier = Modifier.fillMaxSize()
         ) {
             Icon(
                 painter = painterResource(iconRes),
@@ -201,7 +185,7 @@ fun SquareIconButton(
 private fun HistoryCard(history: List<List<Int>>) {
     Surface(
         shape = RoundedCornerShape(8.dp),
-        color = HistoryBg       // той самий фон
+        color = HistoryBg
     ) {
         LazyColumn(
             modifier = Modifier
@@ -210,9 +194,9 @@ private fun HistoryCard(history: List<List<Int>>) {
         ) {
             items(history) { faces ->
                 HistoryRow(faces)
-                Divider(
-                    color = Color(0xFF6A6C80),        // тонка лінія між рядками
-                    thickness = 1.dp
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = Color(0xFF6A6C80)
                 )
             }
         }
@@ -221,7 +205,7 @@ private fun HistoryCard(history: List<List<Int>>) {
 
 @Composable
 private fun HistoryRow(faces: List<Int>) {
-    /* невеличкі кості – 36 dp, між ними 8 dp  */
+
     Row(
         horizontalArrangement = Arrangement.spacedBy(
             8.dp,

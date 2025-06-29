@@ -2,14 +2,11 @@ package com.example.randomizerapp.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
 val Typography = Typography(
 
-    /* заголовки */
     headlineLarge = TextStyle(
         fontFamily = Lexend,
         fontWeight = FontWeight.Bold,
@@ -35,7 +32,6 @@ val Typography = Typography(
         fontSize   = 14.sp
     ),
 
-    /* підписи */
     labelSmall = TextStyle(
         fontFamily = Lexend,
         fontWeight = FontWeight.Medium,

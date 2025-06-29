@@ -17,7 +17,6 @@ val domainModule = module {
     single { GetYesNoHistoryUseCase(get()) }
     single { GetRandomNumberUseCase(get()) }
     single { GetNumberHistoryUseCase(get()) }
-
     single { GetLanguageUseCase(get()) }
     single { SetLanguageUseCase(get()) }
 }

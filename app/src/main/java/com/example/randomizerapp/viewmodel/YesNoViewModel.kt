@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class YesNoViewModel(
-    private val getAnswerUC: GetYesNoUseCase,
-    getHistoryUC: GetYesNoHistoryUseCase
+    private val getAnswerUC: GetYesNoUseCase, getHistoryUC: GetYesNoHistoryUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(YesNoUiState())

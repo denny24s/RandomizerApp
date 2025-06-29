@@ -8,6 +8,4 @@ object DataStoreKeys {
     const val YESNO_HISTORY  = "yesno_history"
     const val NUMBER_HISTORY  = "number_history"
     val LANGUAGE: Preferences.Key<String> = stringPreferencesKey("language_code")
-
-
 }

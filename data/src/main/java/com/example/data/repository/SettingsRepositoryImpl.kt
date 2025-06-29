@@ -13,11 +13,10 @@ class SettingsRepositoryImpl(
     private val ds: DataStore<Preferences>
 ) : SettingsRepository {
 
-    override val languageFlow: Flow<Language> =
-        ds.data.map { prefs ->
-            val code = prefs[DataStoreKeys.LANGUAGE] ?: Language.EN.code
-            Language.fromCode(code)
-        }
+    override val languageFlow: Flow<Language> = ds.data.map { prefs ->
+        val code = prefs[DataStoreKeys.LANGUAGE] ?: Language.EN.code
+        Language.fromCode(code)
+    }
 
     override suspend fun setLanguage(lang: Language) {
         ds.edit { it[DataStoreKeys.LANGUAGE] = lang.code }

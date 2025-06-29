@@ -50,22 +50,19 @@ android {
 }
 
 dependencies {
-
     implementation(project(":domain"))
     implementation(project(":data"))
 
     // ViewModel & Lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")  // ViewModel coroutine support
+
     // Compose <–> ViewModel integration
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-
 
     implementation("io.insert-koin:koin-android:3.5.3")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
     implementation("androidx.navigation:navigation-compose:2.7.7")
-
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

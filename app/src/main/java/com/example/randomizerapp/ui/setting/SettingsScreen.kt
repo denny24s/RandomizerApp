@@ -5,14 +5,21 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Divider
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,32 +32,28 @@ import com.example.randomizerapp.ui.theme.SplashBackground
 import com.example.randomizerapp.viewmodel.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
-/* -------- SettingsScreen.kt -------- */
 @Composable
 fun SettingsScreen(
-    onBack: () -> Unit,
-    vm: SettingsViewModel = koinViewModel()
+    onBack: () -> Unit, vm: SettingsViewModel = koinViewModel()
 ) {
     val ctx = LocalContext.current
 
     Surface(color = SplashBackground, modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            /* ---------- Header ---------- */
+
             Box(
                 Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp, start = 24.dp, end = 8.dp)
             ) {
-                Icon(
-                    painterResource(R.drawable.baseline_arrow_back_ios_new_24),
+                Icon(painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier
-                        .size(12.dp)                 // ← менше
+                        .size(12.dp)
                         .align(Alignment.CenterStart)
-                        .clickable { onBack() }
-                )
+                        .clickable { onBack() })
                 Text(
                     "Menu",
                     color = Color.White,
@@ -60,23 +63,21 @@ fun SettingsScreen(
                 )
             }
 
-            /* ---------- Logo block ---------- */
-            Spacer(Modifier.height(120.dp))            // трохи вище
+            Spacer(Modifier.height(120.dp))
             Image(
                 painterResource(R.drawable.dice_5),
                 contentDescription = null,
-                modifier = Modifier.size(180.dp)       // менша кость
+                modifier = Modifier.size(180.dp)
             )
             Spacer(Modifier.height(6.dp))
             Image(
                 painterResource(R.drawable.logo_ramdomizer),
                 contentDescription = null,
-                modifier = Modifier.height(48.dp)     // менший PNG
+                modifier = Modifier.height(48.dp)
             )
 
             Spacer(Modifier.height(120.dp))
 
-            /* ---------- Menu items ---------- */
             MenuItem(R.drawable.baseline_language_24, "Language") {
                 Toast.makeText(ctx, "Not implemented yet…", Toast.LENGTH_SHORT).show()
             }
@@ -93,8 +94,7 @@ fun SettingsScreen(
             MenuItem(R.drawable.baseline_star_border_24, "Rate") {
                 ctx.startActivity(
                     Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/denny24s/RandomizerApp")
+                        Intent.ACTION_VIEW, Uri.parse("https://github.com/denny24s/RandomizerApp")
                     )
                 )
             }
@@ -109,13 +109,11 @@ private fun MenuItem(icon: Int, title: String, onClick: () -> Unit) {
             .fillMaxWidth()
             .clickable { onClick() }
             .padding(horizontal = 24.dp, vertical = 18.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+        verticalAlignment = Alignment.CenterVertically) {
         Icon(painterResource(icon), null, tint = Color.White, modifier = Modifier.size(24.dp))
         Spacer(Modifier.width(24.dp))
         Text(title, color = Color.White, style = MaterialTheme.typography.bodyLarge)
     }
-    /* ►  Divider вилучено */
 }
 
 

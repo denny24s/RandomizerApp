@@ -8,11 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface RandomRepository {
 
-    /* Dice */
     suspend fun rollDice(count: Int): DiceResult
     fun diceHistory(): Flow<List<DiceResult>>
 
-    /* Yes / No */
     suspend fun getYesNo(): YesNoResult
     fun yesNoHistory(): Flow<List<YesNoResult>>
 

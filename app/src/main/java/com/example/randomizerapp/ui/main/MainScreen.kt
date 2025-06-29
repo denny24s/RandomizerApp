@@ -1,21 +1,33 @@
-// MainScreen.kt – hosts TopBar, TabRow and MainNavHost
 package com.example.randomizerapp.ui.main
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LeadingIconTab
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.randomizerapp.R
@@ -29,15 +41,13 @@ fun MainScreen() {
     val navController = rememberNavController()
     var currentTab by rememberSaveable { mutableStateOf(MainTab.Dice) }
 
-    // ❱❱  у будь-якому місці ПЕРЕД Scaffold:
-    val backEntry   by navController.currentBackStackEntryAsState()
-    val isSettings  = backEntry?.destination?.route == SETTINGS_ROUTE      // 👈
+    val backEntry by navController.currentBackStackEntryAsState()
+    val isSettings = backEntry?.destination?.route == SETTINGS_ROUTE
+
 
     Scaffold(
-
-        /* ---------- TOP BAR ---------- */
         topBar = {
-            if (!isSettings) {                      // 👈 показуємо лише не в settings
+            if (!isSettings) {
                 SmallTopAppBar(
                     colors = TopAppBarDefaults.smallTopAppBarColors(
                         containerColor = SplashBackground,
@@ -81,42 +91,41 @@ fun MainScreen() {
 
         Column(Modifier.padding(innerPadding)) {
 
-            /* ---------- TabRow ---------- */
-            if (!isSettings) {                      // ← він уже ховався; лишаємо
+            if (!isSettings) {
                 TabRow(
                     selectedTabIndex = currentTab.ordinal,
                     containerColor = SplashBackground,
-                    contentColor   = AccentRed,
+                    contentColor = AccentRed,
                     indicator = { tp ->
-                        TabRowDefaults.Indicator(
+                        SecondaryIndicator(
                             Modifier.tabIndicatorOffset(tp[currentTab.ordinal]),
-                            color = AccentRed, height = 2.dp
+                            height = 2.dp,
+                            color = AccentRed
                         )
                     }
                 ) {
                     MainTab.entries.forEach { tab ->
                         LeadingIconTab(
                             selected = tab == currentTab,
-                            onClick  = {
+                            onClick = {
                                 currentTab = tab
                                 navController.navigate(tab.route) {
                                     popUpTo(MainTab.Dice.route) { saveState = true }
                                     launchSingleTop = true
-                                    restoreState    = true
+                                    restoreState = true
                                 }
                             },
                             text = { Text(tab.name) },
-                            /* ---- FIX: повертаємо iconRes ---- */
                             icon = {
                                 val iconRes = when (tab) {
-                                    MainTab.Dice   -> R.drawable.dice_10990646
-                                    MainTab.YesNo  -> R.drawable.rule_24px
+                                    MainTab.Dice -> R.drawable.dice_icon_main_screen
+                                    MainTab.YesNo -> R.drawable.rule_24px
                                     MainTab.Number -> R.drawable.numbers_24px
                                 }
                                 Icon(
                                     painter = painterResource(iconRes),
                                     contentDescription = tab.name,
-                                    tint   = if (tab == currentTab) AccentRed else Color.White,
+                                    tint = if (tab == currentTab) AccentRed else Color.White,
                                     modifier = Modifier.size(20.dp)
                                 )
                             },
@@ -127,15 +136,13 @@ fun MainScreen() {
                 }
             }
 
-            /* ---------- Host ---------- */
             MainNavHost(
                 navController = navController,
-                modifier      = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
 }
-
 
 
 @Preview

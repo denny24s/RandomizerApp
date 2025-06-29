@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import com.example.randomizerapp.ui.theme.HistoryBg
@@ -48,14 +48,13 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
 
     Box(Modifier.fillMaxSize()) {
 
-        /* ----- коло з PNG ----- */
         state.answer?.let { ans ->
             val alpha by animateFloatAsState(1f, label = "")
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 120.dp)      // відступ від TabRow
+                    .padding(top = 120.dp)
             ) {
                 Image(
                     painter = painterResource(
@@ -69,7 +68,6 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
             }
         }
 
-        /* --------  History -------- */
         AnimatedVisibility(
             visible = showHistory && state.history.isNotEmpty(),
             enter   = fadeIn(tween(300)),
@@ -81,7 +79,6 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
             YesNoHistoryCard(state.history)
         }
 
-        /* history toggle (зліва внизу) */
         SquareIconButton(
             onClick = { showHistory = !showHistory },
             iconRes = R.drawable.format_list_numbered_24px,
@@ -91,7 +88,7 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
                 .padding(start = 6.dp, bottom = 24.dp)
         )
 
-        /* Get random button */
+
         Button(
             onClick = vm::onGet,
             colors = ButtonDefaults.buttonColors(
@@ -107,7 +104,7 @@ fun YesNoScreen(vm: YesNoViewModel = koinViewModel()) {
     }
 }
 
-/* картка історії */
+
 @Composable
 private fun YesNoHistoryCard(list: List<YesNoResult>) {
     Surface(
@@ -134,9 +131,9 @@ private fun YesNoHistoryCard(list: List<YesNoResult>) {
                     )
 
                 }
-                Divider(
-                    color = Color(0xFF6A6C80),
-                    thickness = 1.dp
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = Color(0xFF6A6C80)
                 )
             }
         }

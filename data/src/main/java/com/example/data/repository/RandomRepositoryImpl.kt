@@ -18,8 +18,6 @@ class RandomRepositoryImpl(
     private val prefs: RandomPrefsDataStore
 ) : RandomRepository {
 
-
-
     private val yesNoCache = MutableStateFlow<List<YesNoResult>>(emptyList())
 
     init {
@@ -37,11 +35,9 @@ class RandomRepositoryImpl(
     override fun yesNoHistory(): Flow<List<YesNoResult>> = yesNoCache.asStateFlow()
 
 
-
     private val _historyCache = MutableStateFlow<List<DiceResult>>(emptyList())
 
     init {
-        // синхронізуємося з DataStore один раз
         CoroutineScope(Dispatchers.IO).launch {
             prefs.diceHistory.collect { _historyCache.value = it }
         }

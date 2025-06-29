@@ -17,7 +17,7 @@ const val SETTINGS_ROUTE = "settings"
 
 @Composable
 fun MainNavHost(
-    navController: NavHostController,              // <-- обов’язковий
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -27,10 +27,10 @@ fun MainNavHost(
             .fillMaxSize()
             .background(SplashBackground)
     ) {
-        composable(MainTab.Dice.route)   { DiceScreen() }
-        composable(MainTab.YesNo.route)  { YesNoScreen() }
+        composable(MainTab.Dice.route) { DiceScreen() }
+        composable(MainTab.YesNo.route) { YesNoScreen() }
         composable(MainTab.Number.route) { NumberScreen() }
-        composable(SETTINGS_ROUTE)       {
+        composable(SETTINGS_ROUTE) {
             SettingsScreen(onBack = { navController.popBackStack() })
         }
     }

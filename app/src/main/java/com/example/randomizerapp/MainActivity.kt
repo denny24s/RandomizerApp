@@ -3,7 +3,6 @@ package com.example.randomizerapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -34,7 +33,7 @@ private fun AppEntryPoint() {
     if (isSplashVisible) {
         SplashScreen(onTimeout = { isSplashVisible = false })
     } else {
-        MainScreen()          //  ← без goToSettings
+        MainScreen()
     }
 }
 
@@ -42,13 +41,10 @@ private fun AppEntryPoint() {
 @Composable
 private fun MainPlaceholderScreen() {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "Main Screen",
-            modifier = Modifier
-                .align(Alignment.Center)
+            text = "Main Screen", modifier = Modifier.align(Alignment.Center)
         )
     }
 }

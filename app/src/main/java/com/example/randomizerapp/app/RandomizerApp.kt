@@ -11,13 +11,12 @@ class RandomizerApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // ⚡️ Стартуємо Koin ОДИН раз на весь процес
         startKoin {
             androidContext(this@RandomizerApp)
             modules(
-                dataModule,       // з модуля :data
-                domainModule,     // з модуля :domain
-                presentationModule// з модуля :app
+                dataModule,
+                domainModule,
+                presentationModule
             )
         }
     }
